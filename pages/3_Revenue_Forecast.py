@@ -39,44 +39,40 @@ rev_col1, rev_col2, rev_col3, rev_col4 = st.columns(4)
 with rev_col1:
     ticket_rpv = st.number_input(
         "Ticket Sales",
-        min_value=0.00,
-        max_value=200.00,
-        value=50.00,
-        step=1.00,
-        format="$%.2f",
+        min_value=0.0,
+        max_value=200.0,
+        value=50.0,
+        step=1.0,
         help="Revenue per visitor from lift tickets"
     )
 
 with rev_col2:
     snowplay_rpv = st.number_input(
         "Snowplay & Winter Ops",
-        min_value=0.00,
-        max_value=100.00,
-        value=8.00,
-        step=0.50,
-        format="$%.2f",
+        min_value=0.0,
+        max_value=100.0,
+        value=8.0,
+        step=0.5,
         help="Tubing, sledding, and other winter operations"
     )
 
 with rev_col3:
     ski_school_rpv = st.number_input(
         "Ski School",
-        min_value=0.00,
-        max_value=150.00,
-        value=15.00,
-        step=1.00,
-        format="$%.2f",
+        min_value=0.0,
+        max_value=150.0,
+        value=15.0,
+        step=1.0,
         help="Lessons and instruction revenue"
     )
 
 with rev_col4:
     retail_rpv = st.number_input(
         "Retail",
-        min_value=0.00,
-        max_value=100.00,
-        value=12.00,
-        step=0.50,
-        format="$%.2f",
+        min_value=0.0,
+        max_value=100.0,
+        value=12.0,
+        step=0.5,
         help="Clothing, accessories, equipment sales"
     )
 
@@ -87,44 +83,40 @@ rev_col5, rev_col6, rev_col7, rev_col8 = st.columns(4)
 with rev_col5:
     rentals_rpv = st.number_input(
         "Rentals",
-        min_value=0.00,
-        max_value=100.00,
-        value=9.00,
-        step=0.50,
-        format="$%.2f",
+        min_value=0.0,
+        max_value=100.0,
+        value=9.0,
+        step=0.5,
         help="Equipment rental revenue"
     )
 
 with rev_col6:
     fb_rpv = st.number_input(
         "Food & Beverage",
-        min_value=0.00,
-        max_value=100.00,
-        value=18.00,
-        step=0.50,
-        format="$%.2f",
+        min_value=0.0,
+        max_value=100.0,
+        value=18.0,
+        step=0.5,
         help="Dining and beverages revenue per visitor"
     )
 
 with rev_col7:
     summer_rpv = st.number_input(
         "Summer Activities",
-        min_value=0.00,
-        max_value=100.00,
-        value=8.00,
-        step=0.50,
-        format="$%.2f",
+        min_value=0.0,
+        max_value=100.0,
+        value=8.0,
+        step=0.5,
         help="Mountain biking, hiking, events, etc."
     )
 
 with rev_col8:
     other_rpv = st.number_input(
         "Other Revenue",
-        min_value=0.00,
-        max_value=50.00,
-        value=2.00,
+        min_value=0.0,
+        max_value=50.0,
+        value=2.0,
         step=0.25,
-        format="$%.2f",
         help="Miscellaneous revenue streams"
     )
 
