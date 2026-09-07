@@ -75,10 +75,9 @@ for idx, category in enumerate(expense_categories):
         with exp_col_b:
             variable = st.number_input(
                 f"{category} - Variable ($ per visitor)",
-                min_value=0.00,
-                value=5.00,
-                step=0.50,
-                format="$%.2f",
+                min_value=0.0,
+                value=5.0,
+                step=0.5,
                 key=f"{category}_variable",
             )
         
