@@ -1,203 +1,80 @@
 import streamlit as st
 
-from components.charts import (
-    cash_flow_chart,
-    financial_performance_chart,
-    per_visit_chart,
-    visitation_chart,
-)
-from components.inputs import render_assumption_inputs
-from components.metrics import render_summary_metrics
-from exports.excel_export import create_excel_export
-from model.projection import build_projection
-from model.validation import validate_assumptions
-from model.valuation import calculate_summary_metrics
-
-
+# Configure page
 st.set_page_config(
-    page_title="Resort Financial Model",
+    page_title="Resort Financial Dashboard V2",
     page_icon="🏔️",
     layout="wide",
+    initial_sidebar_state="expanded",
 )
 
-st.title("Resort Financial Model")
-st.caption(
-    "Interactive baseline, capital program, "
-    "10-year projection, and valuation dashboard"
-)
-
-assumptions = render_assumption_inputs()
-
-validation_errors = validate_assumptions(
-    assumptions
-)
-
-if validation_errors:
-    st.error(
-        "Correct the following assumptions before "
-        "reviewing the results:"
-    )
-
-    for error in validation_errors:
-        st.write(f"- {error}")
-
-    st.stop()
-
-projection = build_projection(
-    assumptions
-)
-
-metrics = calculate_summary_metrics(
-    projection,
-    assumptions,
-)
-
-st.subheader(assumptions.scenario_name)
-
-render_summary_metrics(metrics)
-
-dashboard_tab, detail_tab, valuation_tab = st.tabs(
-    [
-        "Executive Dashboard",
-        "Model Detail",
-        "Valuation",
-    ]
-)
-
-with dashboard_tab:
-    chart_col_1, chart_col_2 = st.columns(2)
-
-    with chart_col_1:
-        st.plotly_chart(
-            financial_performance_chart(
-                projection
-            ),
-            use_container_width=True,
-        )
-
-    with chart_col_2:
-        st.plotly_chart(
-            visitation_chart(
-                projection
-            ),
-            use_container_width=True,
-        )
-
-    chart_col_3, chart_col_4 = st.columns(2)
-
-    with chart_col_3:
-        st.plotly_chart(
-            per_visit_chart(
-                projection
-            ),
-            use_container_width=True,
-        )
-
-    with chart_col_4:
-        st.plotly_chart(
-            cash_flow_chart(
-                projection
-            ),
-            use_container_width=True,
-        )
-
-with detail_tab:
-    st.subheader(
-        "Baseline Through Year 10"
-    )
-
-    display_projection = projection.copy()
-
-    currency_columns = [
-        "Ticket Revenue per Visit",
-        "Ancillary Revenue per Visit",
-        "Total Revenue per Visit",
-        "Ticket Revenue",
-        "Ancillary Revenue",
-        "Total Revenue",
-        "Variable Expense per Visit",
-        "Variable Expense",
-        "Fixed Expense",
-        "Operating Expense",
-        "EBITDA",
-        "Taxes",
-        "Operating Cash Flow",
-        "Capital Investment",
-        "Free Cash Flow",
-        "Cumulative Free Cash Flow",
-    ]
-
-    column_configuration = {
-        column: st.column_config.NumberColumn(
-            column,
-            format="$%.0f",
-        )
-        for column in currency_columns
+# Add custom styling
+st.markdown("""
+    <style>
+    .main-header {
+        font-size: 2.5rem;
+        color: #1f77b4;
+        margin-bottom: 0.5rem;
     }
+    .sub-header {
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 2rem;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-    column_configuration[
-        "Skier Visits"
-    ] = st.column_config.NumberColumn(
-        "Skier Visits",
-        format="%.0f",
-    )
+# Sidebar navigation
+st.sidebar.title("🏔️ Resort Financial Dashboard V2")
+st.sidebar.markdown("---")
 
-    column_configuration[
-        "EBITDA Margin"
-    ] = st.column_config.NumberColumn(
-        "EBITDA Margin",
-        format="percent",
-    )
+st.markdown("""
+    <div class="main-header">Resort Financial Dashboard V2</div>
+    <div class="sub-header">Comprehensive Financial Planning & Analysis Tool</div>
+""", unsafe_allow_html=True)
 
-    st.dataframe(
-        display_projection,
-        column_config=column_configuration,
-        hide_index=True,
-        use_container_width=True,
-    )
+# Home content
+st.markdown("""
+## Welcome to Your Financial Planning Suite
 
-with valuation_tab:
-    valuation_col_1, valuation_col_2 = (
-        st.columns(2)
-    )
+This enhanced dashboard provides comprehensive tools for resort financial planning and analysis.
 
-    valuation_col_1.metric(
-        "Gordon Growth Enterprise Value",
-        (
-            "N/M"
-            if metrics["Gordon Enterprise Value"] is None
-            else f"${metrics['Gordon Enterprise Value']:,.0f}"
-        ),
-    )
+### 📊 Available Tools
 
-    valuation_col_2.metric(
-        "Exit Multiple Enterprise Value",
-        f"${metrics['Exit Enterprise Value']:,.0f}",
-    )
+Navigate using the sidebar to access:
 
-    st.write(
-        "The 10-year NPV excludes terminal value. "
-        "The enterprise value measures add the "
-        "present value of the applicable terminal value."
-    )
+1. **Financial Summary** - Overview of key financial metrics and KPIs
+2. **Demand Forecast** - Project visitor volumes based on your inputs
+3. **Revenue Forecast** - Model revenue by category (Tickets, Food & Beverage, Retail, etc.)
+4. **Expense Forecast** - Estimate operating expenses with fixed/variable cost breakdown
+5. **Capital Plan** - Plan and track capital investments
+6. **Funding Strategy** - Evaluate financing options and capital structures
+7. **Scenario Builder** - Compare multiple financial scenarios side-by-side
+8. **Risk Analysis** - Monte Carlo simulations and sensitivity analysis
 
-excel_file = create_excel_export(
-    assumptions.to_dict(),
-    projection,
-    metrics,
-)
+### 🚀 Quick Start
 
-st.download_button(
-    label="Download Model to Excel",
-    data=excel_file,
-    file_name=(
-        f"{assumptions.scenario_name}"
-        .lower()
-        .replace(" ", "_")
-        + ".xlsx"
-    ),
-    mime=(
-        "application/vnd.openxmlformats-officedocument."
-        "spreadsheetml.sheet"
-    ),
+1. Start with **Demand Forecast** to project visitor volumes
+2. Move to **Revenue Forecast** to estimate income streams
+3. Model expenses in **Expense Forecast**
+4. Use **Scenario Builder** to compare different assumptions
+5. Run **Risk Analysis** to understand downside scenarios
+
+### 📈 Features
+
+- Interactive input forms for dynamic projections
+- Real-time calculations and visualizations
+- Multi-scenario comparison capabilities
+- Statistical risk analysis (Monte Carlo, sensitivity)
+- Export capabilities for further analysis
+
+---
+
+**Version 2.0** | Enhanced Financial Planning Suite
+""")
+
+st.sidebar.markdown("---")
+st.sidebar.info(
+    "💡 **Tip**: Start with Demand Forecast to establish visitor volume projections, "
+    "then model revenue and expenses based on those volumes."
 )
