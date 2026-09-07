@@ -170,10 +170,14 @@ for year in range(1, loan_term + 1):
 
 debt_schedule_df = pd.DataFrame(debt_schedule)
 
+# Format the dataframe for display
+display_debt = debt_schedule_df.copy()
+for col in display_debt.columns:
+    if col != "Year":
+        display_debt[col] = display_debt[col].apply(lambda x: f"${x:,.0f}")
+
 st.dataframe(
-    debt_schedule_df.applymap(
-        lambda x: f"${x:,.0f}" if isinstance(x, (int, float)) else x
-    ),
+    display_debt,
     hide_index=True,
     use_container_width=True,
 )
